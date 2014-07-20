@@ -244,6 +244,9 @@ Squamagochi = function(name) {
 		if( this.condition.HP <= 0 ) {
 			this.condition.HP = 0;
 			this.state = STATE.DEAD;
+			
+			this.is_thinking = false;
+			$('.player-current-thought').stop().animate({opacity: 0}, 'fast');
 		}
 
 		/* Limit HP value to its max value */
