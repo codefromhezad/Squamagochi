@@ -9,7 +9,7 @@ var ThoughtsRepository = {
 		"Hmm ... I wonder if there's a squariverse where numbers have other numbers in between ..."
 	],
 	idle: [
-		"What's that song again ?",
+		"What was that song again ?",
 		"Sometimes I wonder ... Is there something outside the Squariverse?",
 	],
 	agonizing: [

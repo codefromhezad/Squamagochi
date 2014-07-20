@@ -20,7 +20,7 @@ Squamagochi = function(name) {
 	this.name = name;
 	this.birthdate = timestamp();
 	this.state = STATE.IDLE;
-	this.position = {x: 300, y: 200};
+	this.position = {x: 300, y: 250};
 	this.size = 64;
 	
 	this.sprites = {
