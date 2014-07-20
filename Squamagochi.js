@@ -12,6 +12,7 @@ var STATE = {
 	IDLE: 'idle',
 	RECOVERING: 'recovering',
 	STARVING: 'starving',
+	DEHYDRATED: 'dehydrated',
 	AGONIZING: 'agonizing',
 	DEAD: 'dead',
 }
@@ -124,9 +125,8 @@ Squamagochi = function(name) {
 		/* State induced sprites update */
 		switch( this.state ) {
 			case STATE.AGONIZING:
-				this.sprites.mouth = SpritesRepository.mouth_sad;
-				break;
 			case STATE.STARVING:
+			case STATE.DEHYDRATED:
 				this.sprites.mouth = SpritesRepository.mouth_sad;
 				break;
 			case STATE.RECOVERING:
@@ -225,7 +225,7 @@ Squamagochi = function(name) {
 		/* Thirst impact on HP */
 		if( this.condition.thirst >= CONDITION_MAX_VALUE ) {
 			this.condition.thirst = CONDITION_MAX_VALUE;
-			this.state = STATE.STARVING;
+			this.state = STATE.DEHYDRATED;
 			this.condition.HP -= HP_LOST_WHEN_STARVING;
 		}
 

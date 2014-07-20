@@ -1,8 +1,13 @@
 var ThoughtsRepository = {
 	starving: [
 		"Damn, I'm starving ...",
-		"I don't feel really good ...",
-		"Gosh, I feel so weak I don't even know if I'm thirsty or hungry right now ...",
+		"I'd do anything to eat something ...",
+		"Gosh, I'm so hungry I could eat a rotting cow right now.",
+	],
+	dehydrated: [
+		"Some ... Water ... PLEASE.",
+		"I'm dizzy ... And thirsty ...",
+		"God ... Don't be such a dick. PLEASE GIMME SOME WATER!",
 	],
 	recovering: [
 		"I feel ... GOOD !",
