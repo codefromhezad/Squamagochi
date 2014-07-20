@@ -165,18 +165,18 @@ Squamagochi = function(name) {
 		/* Player sprite */
 		this.update_sprites();
 
-		/* Player condition panel */
-		$('.main-panel [data-condition]').each( function() {
-			var $this = $(this);
-			var cond = $this.attr('data-condition');
-			$this.text(squamagotchi.condition[cond].toFixed(2));
-		});
-
 		/* Player id card panel */
 		$('.main-panel [data-var]').each( function() {
 			var $this = $(this);
 			var v = $this.attr('data-var');
-			$this.text(squamagotchi[v]);
+
+			v = squamagotchi[v];
+
+			if( $this.attr('data-filter') ) {
+				v = window[$this.attr('data-filter')]( v );
+			}
+
+			$this.text(v);
 		});
 
 		/* Document Title Update */
