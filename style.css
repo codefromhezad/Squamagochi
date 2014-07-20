@@ -1,0 +1,134 @@
+body {
+	padding: 0;
+	margin: 0;
+	font-family: 'Helvetica Neue', Helvetica, Arial, Verdana, Sans;
+	font-size: 14px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+	padding: 0;
+	text-transform: uppercase;
+}
+
+.main-panel {
+	float: left;
+	width: 400px;
+}
+
+.main-panel dt {
+	font-weight: bold;
+	display: inline-block;
+	width: 100px;
+	text-align: right;
+	padding-right: 20px;
+}
+
+.main-panel dd {
+	display: inline-block;
+	width: 280px;
+	margin: 0;
+	padding: 0;
+}
+
+.screen {
+	width: 600px;
+	height: 400px;
+	position: relative;
+	background: #eee;
+	float: left;
+}
+
+.condition-progress {
+	width: 150px;
+	margin-top: 20px;
+	margin-left: 20px;
+	padding-left: 20px;
+	height: 14px;
+	float: left;
+}
+
+.condition-progress.hp { background: url('sprites/picto-life-bar.png') no-repeat left center; }
+.condition-progress.hunger { background: url('sprites/picto-hunger-bar.png') no-repeat left center; }
+.condition-progress.thirst { background: url('sprites/picto-thirst-bar.png') no-repeat left center; }
+
+.player {
+	position: absolute;
+}
+
+.player .eye {
+	width: 8px;
+	height: 8px;
+	position: absolute;
+	top: 20px;
+}
+
+.player .eye.left { left: 15px; }
+.player .eye.right { right: 15px; }
+
+.player .mouth {
+	width: 16px;
+	height: 8px;
+	position: absolute;
+	left: 24px;
+	bottom: 15px;
+}
+
+.player-current-thought {
+	position: absolute;
+	padding: 10px 20px;
+	width: 150px;
+	margin: 0;
+	border: 2px solid #404040;
+	text-align: center;
+	color: #333;
+	background: #fff;
+	-webkit-border-top-left-radius: 4px 4px;
+	-webkit-border-top-right-radius: 4px 4px;
+	-webkit-border-bottom-right-radius: 4px 4px;
+	-webkit-border-bottom-left-radius: 4px 4px;
+	-moz-border-radius: 4px / 4px;
+	border-radius: 4px / 4px;
+
+	opacity: 0;
+}
+
+.player-current-thought p {
+	padding: 0;
+	margin: 0;
+}
+
+.player-current-thought:before {
+	content: "";
+	position: absolute;
+	z-index: 10;
+	bottom: -30px;
+	width: 20px;
+	height: 20px;
+	border: 2px solid #404040;
+	background: #fff;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	display: block;
+}
+.player-current-thought:after {
+	content: "";
+	position: absolute;
+	z-index: 10;
+	bottom: -46px;
+	width: 10px;
+	height: 10px;
+	border: 2px solid #404040;
+	background: #fff;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	display: block;
+}
+
+.player-current-thought.left:before { right: 73px; }
+.player-current-thought.left:after { right: 53px; }
+
+.player-current-thought.right:before { left: 37px; }
+.player-current-thought.right:after { left: 25px; }

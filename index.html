@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+	<title>Squamagochi !</title>
+
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="progressjs.min.css">
+	
+	<script src="jquery.js"></script>
+	
+	<script src="progress.min.js"></script>
+	<script src="helpers.js"></script>
+	<script src="Item.js"></script>
+	<script src="Thoughts.js"></script>
+	<script src="Squamagochi.js"></script>
+
+	<script>
+		var TIME_UNIT = 1000; // 1 time unit = 1000 milliseconds (= 1 second).
+		var CONDITION_MAX_VALUE = 10;
+		
+		var HUNGER_TIMING = 20; // Hunger gain a point every 20 time units
+		var THIRST_TIMING = 10; // Thirst gain a point every 10 time units
+		var HP_LOST_WHEN_STARVING = 0.2;
+
+		var MAX_FOOD_COND_FOR_HP_REGENERATION = 5; // HP gains a starving unit (see HP LOST WHEN STARVING) if hunger && thirst below 5
+		var MIN_HP_BEFORE_AGONIZING = 1.5; // State becomes "agonizing" if player's hp below 1.5 
+
+		var THOUGHTS_DENSITY = 0.33; 
+		var IDLE_THOUGHTS_DENSITY = 0.05; // Idle is the default state, so its thoughts density should be biased.
+		var DELAY_BETWEEN_THOUGHTS = 4; // The minimum delay between two thoughts is 4 time units
+
+		var BLINKING_DENSITY = 0.05;
+
+		var CONDITION_TO_PERCENT = 100 / CONDITION_MAX_VALUE;
+
+		$( function() {
+			var player = new Squamagochi('Fred');
+
+			player.update();
+			player.render();
+
+			var timer = milli_timestamp();
+			setInterval( function() {
+				if( milli_timestamp() - timer >= TIME_UNIT ) {
+					player.update();
+					timer = milli_timestamp();
+				}
+				player.render();
+			}, 100);
+
+			$('[data-use-item]').click( function(e) {
+				e.preventDefault();
+
+				var $this = $(this);
+				var item_slug = $this.attr('data-use-item');
+
+				player.use_item(ItemsRepository[item_slug]);
+
+				return false;
+			});
+		});
+
+	</script>
+</head>
+<body>
+	<div class="screen">
+		<div class="condition-progress hp">
+			<div class="progress-hp"></div>
+		</div>
+
+		<div class="condition-progress hunger">
+			<div class="progress-hunger"></div>
+		</div>
+
+		<div class="condition-progress thirst">
+			<div class="progress-thirst"></div>
+		</div>
+
+		<div class="player">
+			<div class="eye left"></div>
+			<div class="eye right"></div>
+
+			<div class="mouth"></div>
+		</div>
+
+		<blockquote class="player-current-thought right">
+	        <p>This is a blockquote that is styled to look like a thought bubble</p>
+	    </blockquote>
+	</div>
+
+	<div class="main-panel">
+		<h4>ID card</h4>
+		<dl>
+			<dt>Name</dt><dd data-var="name"></dd>
+			<dt>State</dt><dd data-var="state"></dd>
+		</dl>
+
+		<h4>Condition</h4>
+		<dl>
+			<dt>HP</dt><dd data-condition="HP"></dd>
+			<dt>Hunger</dt><dd data-condition="hunger"></dd>
+			<dt>Thirst</dt><dd data-condition="thirst"></dd>
+		</dl>
+
+		<h4>Items</h4>
+		<a href="#" data-use-item="water">Drink a bottle of water</a>
+		<a href="#" data-use-item="potato">Eat a potato</a>
+
+		<h4>Thoughts</h4>
+		<ul class="thoughts"></ul>
+	</div>
+</body>
+</html>
