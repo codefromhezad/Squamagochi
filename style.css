@@ -31,6 +31,37 @@ h1, h2, h3, h4, h5, h6 {
 	padding: 0;
 }
 
+.items-container {
+	overflow: hidden;
+}
+
+.items-container .item {
+	display: block;
+	width: 32px;
+	height: 32px;
+	float: left;
+	background: url('sprites/item-background.png') no-repeat top left;
+	overflow: hidden;
+}
+
+.items-container .item:active {
+	background-image: url('sprites/item-background-active.png');
+}
+
+.items-container .item span {
+	display: block;
+	height: 32px;
+	width: 32px;
+	background: no-repeat top left;
+}
+
+.items-container .item:active span {
+	margin-top: 1px;
+}
+
+.items-container .item-potato span { background-image: url('sprites/item-potato.png'); }
+.items-container .item-water span { background-image: url('sprites/item-water.png'); }
+
 .screen {
 	width: 600px;
 	height: 400px;
