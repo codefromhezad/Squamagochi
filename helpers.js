@@ -22,6 +22,18 @@ function timestamp_to_nice_date(UNIX_timestamp){
 	return time;
 }
 
+function object_keys_to_csv(obj) {
+	var final_array = new Array();
+
+	for(var k in obj) {
+		if( obj[k] ) {
+			final_array.push(k)
+		}
+	}
+
+	return final_array.join(', ');
+}
+
 function getRandomArrayItem(items) {
 	return items[Math.floor(Math.random()*items.length)];
 }

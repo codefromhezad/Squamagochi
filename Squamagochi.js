@@ -20,7 +20,7 @@ var STATE = {
 Squamagochi = function(name) {
 	this.name = name;
 	this.birthdate = timestamp();
-	this.state = STATE.IDLE;
+	this.states = {};
 	this.position = {x: 300, y: 250};
 	this.size = 64;
 	
@@ -51,6 +51,18 @@ Squamagochi = function(name) {
 	this.thirst_progressbar.setOption('theme', 'thirst').start().set(100);
 	this.hunger_progressbar.setOption('theme', 'hunger').start().set(100);
 
+	this.has_state = function(state) {
+		if( this.states[state] ) {
+			return true;
+		}
+		return false;
+	}
+
+	this.add_state = function(state) {
+		this.states[STATE.IDLE] = false;
+		this.states[state] = true;
+	}
+
 	this.use_item = function(item) {
 		if( item.effect_target && item.effect_value ) {
 			this.condition[item.effect_target] = this.condition[item.effect_target] + item.effect_value;
@@ -70,7 +82,6 @@ Squamagochi = function(name) {
 	}
 
 	this.think = function(thought_slug) {
-		
 		var thought = getRandomArrayItem(ThoughtsRepository[thought_slug]);
 
 		if( this.is_thinking || ! thought ) {
@@ -119,29 +130,49 @@ Squamagochi = function(name) {
 		$('.player .mouth').css({ 'background-image': "url(sprites/"+this.sprites.mouth+")" });
 	}
 
+	this.render_state_sprites = function() {
+		if( this.has_state(STATE.AGONIZING) || this.has_state(STATE.STARVING) || this.has_state(STATE.DEHYDRATED) ) {
+			this.sprites.mouth = SpritesRepository.mouth_sad;
+			return;
+		}
+
+		if( this.has_state(STATE.RECOVERING) ) {
+			this.sprites.mouth = SpritesRepository.mouth_happy;
+			return;
+		}
+
+		if( this.has_state(STATE.DEAD) ) {
+			this.sprites.left_eye = SpritesRepository.eye_dead;
+			this.sprites.right_eye = SpritesRepository.eye_dead;
+			this.sprites.mouth = SpritesRepository.mouth_sad;
+			return;
+		}
+
+		this.sprites.mouth = SpritesRepository.mouth;
+	}
+
+	this.think_about_state = function() {
+		if( this.has_state(STATE.IDLE) && Math.random() < IDLE_THOUGHTS_DENSITY ) {
+			this.think(STATE.IDLE);
+			return;
+		}
+
+		if( this.has_state(STATE.RECOVERING) && Math.random() < IDLE_THOUGHTS_DENSITY ) {
+			this.think(STATE.RECOVERING);
+			return;
+		}
+
+		if( Math.random() < THOUGHTS_DENSITY ) {
+			var state = getRandomArrayItem(Object.keys(this.states));
+			this.think(state);
+		}
+	}
+
 	this.render = function() {
 		var squamagotchi = this;
 
 		/* State induced sprites update */
-		switch( this.state ) {
-			case STATE.AGONIZING:
-			case STATE.STARVING:
-			case STATE.DEHYDRATED:
-				this.sprites.mouth = SpritesRepository.mouth_sad;
-				break;
-			case STATE.RECOVERING:
-				this.sprites.mouth = SpritesRepository.mouth_happy;
-				break;
-			case STATE.DEAD:
-				this.sprites.left_eye = SpritesRepository.eye_dead;
-				this.sprites.right_eye = SpritesRepository.eye_dead;
-
-				this.sprites.mouth = SpritesRepository.mouth_sad;
-				break;
-			default:
-				this.sprites.mouth = SpritesRepository.mouth;
-				break;
-		}
+		this.render_state_sprites();
 
 		/* Blinking eyes */
 		if( Math.random() < BLINKING_DENSITY ) {
@@ -180,14 +211,15 @@ Squamagochi = function(name) {
 		});
 
 		/* Document Title Update */
-		document.title = '['+this.state+'] ' + this.name;
+		document.title = '[HP: '+this.condition.HP+'] ' + this.name;
 	}
 
 	this.update = function() {
 		var squamagotchi = this;
 
 		/* Conditions update */
-		this.state = "idle";
+		this.states = {};
+		this.states[STATE.IDLE] = true;
 
 		/* Hunger */
 		this.hunger_timer += 1;
@@ -218,32 +250,35 @@ Squamagochi = function(name) {
 		/* Hunger impact on HP */
 		if( this.condition.hunger >= CONDITION_MAX_VALUE ) {
 			this.condition.hunger = CONDITION_MAX_VALUE;
-			this.state = STATE.STARVING;
+			this.add_state(STATE.STARVING);
+
 			this.condition.HP -= HP_LOST_WHEN_STARVING;
 		}
 
 		/* Thirst impact on HP */
 		if( this.condition.thirst >= CONDITION_MAX_VALUE ) {
 			this.condition.thirst = CONDITION_MAX_VALUE;
-			this.state = STATE.DEHYDRATED;
+			this.add_state(STATE.DEHYDRATED);
+
 			this.condition.HP -= HP_LOST_WHEN_STARVING;
 		}
 
 		/* HP regeneration if condition is OK */
 		if( this.condition.thirst <= MAX_FOOD_COND_FOR_HP_REGENERATION && this.condition.hunger <= MAX_FOOD_COND_FOR_HP_REGENERATION ) {
 			this.condition.HP += HP_LOST_WHEN_STARVING;
-			this.state = STATE.RECOVERING;
+			this.add_state(STATE.RECOVERING);
 		}
 
 		/* Agonizing if really few HP left */
 		if( this.condition.HP < MIN_HP_BEFORE_AGONIZING ) {
-			this.state = STATE.AGONIZING;
+			this.add_state(STATE.AGONIZING);
 		}
 
 		/* Death if no HP left */
 		if( this.condition.HP <= 0 ) {
 			this.condition.HP = 0;
-			this.state = STATE.DEAD;
+			this.states = {};
+			this.states[STATE.DEAD] = true;
 			
 			this.is_thinking = false;
 			$('.player-current-thought').stop().animate({opacity: 0}, 'fast');
@@ -255,14 +290,6 @@ Squamagochi = function(name) {
 		}
 
 		/* State induced thoughts */
-		if( this.state == STATE.IDLE || this.state == STATE.RECOVERING ) {
-			if( Math.random() < IDLE_THOUGHTS_DENSITY ) {
-				this.think(this.state);
-			}
-		} else {
-			if( Math.random() < THOUGHTS_DENSITY ) {
-				this.think(this.state);
-			}
-		}
+		this.think_about_state();
 	}
 }
