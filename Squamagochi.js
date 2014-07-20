@@ -2,6 +2,7 @@ SpritesRepository = {
 	face: 'face.png',
 	eye: 'eye-opened.png',
 	eye_closed: 'eye-closed.png',
+	eye_dead: 'eye-dead.png',
 	mouth: 'mouth-neutral.png',
 	mouth_happy: 'mouth-happy.png',
 	mouth_sad: 'mouth-sad.png'
@@ -131,6 +132,12 @@ Squamagochi = function(name) {
 			case STATE.RECOVERING:
 				this.sprites.mouth = SpritesRepository.mouth_happy;
 				break;
+			case STATE.DEAD:
+				this.sprites.left_eye = SpritesRepository.eye_dead;
+				this.sprites.right_eye = SpritesRepository.eye_dead;
+
+				this.sprites.mouth = SpritesRepository.mouth_sad;
+				break;
 			default:
 				this.sprites.mouth = SpritesRepository.mouth;
 				break;
@@ -245,9 +252,9 @@ Squamagochi = function(name) {
 		}
 
 		/* State induced thoughts */
-		if( this.state == STATE.IDLE ) {
+		if( this.state == STATE.IDLE || this.state == STATE.RECOVERING ) {
 			if( Math.random() < IDLE_THOUGHTS_DENSITY ) {
-				this.think('idle');
+				this.think(this.state);
 			}
 		} else {
 			if( Math.random() < THOUGHTS_DENSITY ) {

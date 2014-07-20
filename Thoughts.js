@@ -4,8 +4,12 @@ var ThoughtsRepository = {
 		"I don't feel really good ...",
 		"Gosh, I feel so weak I don't even know if I'm thirsty or hungry right now ...",
 	],
+	recovering: [
+		"I feel ... GOOD !",
+		"Hmm ... I wonder if there's a squariverse where numbers have other numbers in between ..."
+	],
 	idle: [
-		"Whistling looks funny. But I have no mouth so ...",
+		"What's that song again ?",
 		"Sometimes I wonder ... Is there something outside the Squariverse?",
 	],
 	agonizing: [
@@ -14,7 +18,6 @@ var ThoughtsRepository = {
 		"Damn, I can't die like this ... I'm too squared to die :(",
 	],
 	dead: [],
-	recovering: [],
 	item_water: [
 		"Aaaaaah. that feels good!",
 		"This water tastes weird ... Bah! That's still water!",

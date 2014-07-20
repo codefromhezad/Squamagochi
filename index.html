@@ -26,7 +26,7 @@
 		var MIN_HP_BEFORE_AGONIZING = 1.5; // State becomes "agonizing" if player's hp below 1.5 
 
 		var THOUGHTS_DENSITY = 0.33; 
-		var IDLE_THOUGHTS_DENSITY = 0.05; // Idle is the default state, so its thoughts density should be biased.
+		var IDLE_THOUGHTS_DENSITY = 0.05; // Idle (and recovering) is the default state, so its thoughts density should be biased.
 		var DELAY_BETWEEN_THOUGHTS = 4; // The minimum delay between two thoughts is 4 time units
 
 		var BLINKING_DENSITY = 0.05;
@@ -40,12 +40,16 @@
 			player.render();
 
 			var timer = milli_timestamp();
-			setInterval( function() {
+			var game_interval = setInterval( function() {
 				if( milli_timestamp() - timer >= TIME_UNIT ) {
 					player.update();
 					timer = milli_timestamp();
 				}
 				player.render();
+
+				if( player.state == STATE.DEAD ) {
+					clearInterval(game_interval);
+				}
 			}, 100);
 
 			$('[data-use-item]').click( function(e) {
@@ -58,6 +62,8 @@
 
 				return false;
 			});
+
+			window.squamagotchi = player;
 		});
 
 	</script>
