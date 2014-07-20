@@ -1,4 +1,6 @@
-This is just a proof of concept. Kinda. I don't even where it goes.
+This is just a proof of concept. Kinda. I don't even know where it goes.
+
+All assets are custom made (Yeah, the "obviously" you just thought wasn't necessary :/ That hurts man. I have feelings you know?)
 
 ## Latest version screenshot
 
